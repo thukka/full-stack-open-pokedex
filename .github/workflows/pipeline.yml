@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - uses: superfly/flyctl-actions/setup-flyctl@master
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
@@ -24,21 +23,26 @@ jobs:
         run: npm run eslint
       - run: npm run build
       - run: npm run test
-      # - name: e2e tests
-      #   uses: cypress-io/github-action@v5
-      #   with:
-      #     command: npm run test:e2e
-      #     start: npm run start-prod
-      #     wait-on: http://localhost:5001
-      # - if: ${{ github.event_name == 'push' }}
-      #   name: deploy to fly.io
-      #   run: flyctl deploy --remote-only
-      #   env:
-      #     FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - name: e2e tests
+        uses: cypress-io/github-action@v5
+        with:
+          command: npm run test:e2e
+          start: npm run start-prod
+          wait-on: http://localhost:5001
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
     steps:
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - if: ${{ github.event_name == 'push' }}
+        name: deploy to fly.io
+        run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - if: ${{ github.event_name == 'push' }}
         name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.71.0
