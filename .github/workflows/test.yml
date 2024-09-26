@@ -24,4 +24,4 @@ jobs:
               run: echo "$COMMIT_MESSAGES"
             - if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
               name: testing if
-              run: echo "hello from the if checker"
+              run: echo "hello from the if checker2"
