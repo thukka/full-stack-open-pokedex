@@ -9,7 +9,7 @@ on:
       types: [opened, synchronize]
 
 env:
-  SKIPPING: ${{ !contains(join(github.event.commits.*.message), '#skip') }}
+  SKIP: ${{ contains(join(github.event.commits.*.message), '#skip') }}
 
 jobs:
   simple_deployment_pipeline:
@@ -32,7 +32,7 @@ jobs:
           command: npm run test:e2e
           start: npm run start-prod
           wait-on: http://localhost:5001
-      - if: ${{ github.event_name == 'push' && env.SKIPPING }}
+      - if: ${{ github.event_name == 'push' && env.SKIP == 'false' }}
         name: deploy to fly.io
         run: flyctl deploy --remote-only
         env:
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - if: ${{ github.event_name == 'push' && env.SKIPPING }}
+      - if: ${{ github.event_name == 'push' && env.SKIP == 'false' }}
         name: Bump version and push tag
         uses: anothrNick/github-tag-action@f278d49d30cdd8775cc3e7dd00b5ee11686ee297
         env:
