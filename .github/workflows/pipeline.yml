@@ -38,15 +38,15 @@ jobs:
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: NOTIFY Deploy successful
-        uses: stegzilla/discord-notify@v4
         if: ${{ env.SKIP == 'false' && success() }}
+        uses: stegzilla/discord-notify@v4
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
           title: SUCCESS Deploy Pokedex
           message: "**Commit message:** ${{ join(github.event.commits.*.message) }} \n **URL** ${{ join(github.event.commits.*.url) }}"
       - name: NOTIFY Deploy failed
-        uses: stegzilla/discord-notify@v4
         if: failure()
+        uses: stegzilla/discord-notify@v4
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
           title: FAILURE Deploy Pokedex
