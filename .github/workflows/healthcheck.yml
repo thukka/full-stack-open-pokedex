@@ -7,6 +7,7 @@ on:
 jobs:
     check_health:
         runs-on: ubuntu-20.04
+        environment: config
         steps:
             - name: Check URL
               run: echo "test env var ${{ env.PROD_URL }}"
