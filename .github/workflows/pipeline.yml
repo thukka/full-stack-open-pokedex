@@ -43,14 +43,14 @@ jobs:
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
           title: SUCCESS Deploy Pokedex
-          message: "**Commit message:** ${{ github.event.commits.*.message }} \n **URL** ${{ github.event.commits.*.URL }}"
+          message: "**Commit message:** ${{ join(github.event.commits.*.message) }} \n **URL** ${{ join(github.event.commits.*.url) }}"
       - name: NOTIFY Deploy failed
         uses: stegzilla/discord-notify@v4
         if: failure()
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
           title: FAILURE Deploy Pokedex
-          message: "**Commit message:** ${{ github.event.commits.*.message }} \n **URL** ${{ github.event.commits.*.URL }}"
+          message: "**Commit message:** ${{ join(github.event.commits.*.message) }} \n **URL** ${{ join(github.event.commits.*.url) }}"
 
   tag_release:
     needs: [simple_deployment_pipeline]
