@@ -37,20 +37,20 @@ jobs:
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      # - name: NOTIFY Deploy successful
-      #   uses: rjstone/discord-webhook-notify@v1.0.4
-      #   if: success()
-      #   with:
-      #     severity: info
-      #     details: SUCCESS Deploy Pokedex to fly.io
-      #     webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      # - name: NOTIFY Deploy failed
-      #   uses: rjstone/discord-webhook-notify@v1.0.4
-      #   if: failure()
-      #   with:
-      #     severity: error
-      #     details: FAILURE Deploy Pokedex
-      #     webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: NOTIFY Deploy successful
+        uses: rjstone/discord-webhook-notify@v1.0.4
+        if: ${{ env.SKIP == 'false' && success() }}
+        with:
+          severity: info
+          details: SUCCESS Deploy Pokedex
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: NOTIFY Deploy failed
+        uses: rjstone/discord-webhook-notify@v1.0.4
+        if: failure()
+        with:
+          severity: error
+          details: FAILURE Deploy Pokedex
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
   tag_release:
     needs: [simple_deployment_pipeline]
