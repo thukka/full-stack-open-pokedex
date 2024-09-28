@@ -38,19 +38,19 @@ jobs:
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: NOTIFY Deploy successful
-        uses: rjstone/discord-webhook-notify@v1.0.4
+        uses: stegzilla/discord-notify@v4
         if: ${{ env.SKIP == 'false' && success() }}
         with:
-          severity: info
-          details: SUCCESS Deploy Pokedex
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+          title: SUCCESS Deploy Pokedex
+          message: "**Commit message:** ${{ github.event.commits.*.message }} \n **URL** ${{ github.event.commits.*.URL }}"
       - name: NOTIFY Deploy failed
-        uses: rjstone/discord-webhook-notify@v1.0.4
+        uses: stegzilla/discord-notify@v4
         if: failure()
         with:
-          severity: error
-          details: FAILURE Deploy Pokedex
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+          title: FAILURE Deploy Pokedex
+          message: "**Commit message:** ${{ github.event.commits.*.message }} \n **URL** ${{ github.event.commits.*.URL }}"
 
   tag_release:
     needs: [simple_deployment_pipeline]
