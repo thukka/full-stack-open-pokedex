@@ -3,7 +3,7 @@ name: Testing!
 on:
     push:
       branches:
-        - main
+        - pipetest3
 
 jobs:
     a_test_job:
@@ -22,4 +22,5 @@ jobs:
               env:
                 COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
               run: echo "$COMMIT_MESSAGES"
-        
+            - name: action
+              run: echo "${{ github.action }}"
